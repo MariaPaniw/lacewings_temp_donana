@@ -10,7 +10,7 @@ The repository contains individual-level life-history data for two antlion speci
 | 2 | `analysis_experiment2.R` | `Data_3_2024_days_to.csv` | Laboratory, constant 27 °C vs 27–39 °C regime | *M. almohadarum* (104) | 104 | 64 days |
 | 3 | `analysis_experiment3.R` | `Data_2025_days_to.csv` + `data_hobo_2025.csv` | Field, natural temperature (22 Apr – 1 Jul 2025) | *M. almohadarum* (75), *M. hyalinus* (95) | 170 | 71 days |
 
-> **Note on file names:** the data file numbers do not match the experiment numbers. `Data_2_2024…` is analysed in **experiment 1** and `Data_3_2024…` in **experiment 2**.
+
 
 ---
 
@@ -61,7 +61,6 @@ Each row is one larva followed from the start of the experiment until death or a
 **Encoding quirks**, which the scripts already handle:
 - The files are Latin-1 encoded. The degree sign in the treatment header appears as `t (¡C)`.
 - Some headers contain line breaks inside quotes, e.g. `"Body_length_I\n(mm)"`. The scripts replace these with spaces.
-- `Data_2_2024_days_to.csv` and `Data_3_2024_days_to.csv` have 10 empty trailing columns and several hundred blank rows below the data. These are dropped on import.
 
 **Sample summary** (from the files):
 
@@ -151,18 +150,9 @@ install.packages(c("brms", "tidyverse", "patchwork", "bayesplot", "scales"))
 
 1. **Set the working directory.** Replace `setwd("LINK TO REPOSITORY")` near the top of the script with the path to your local copy of this repository.
 2. **Set the figure folder.**
-   - **Experiments 1 and 2.** The scripts call `setwd(".../plots")` before the figure section. Replace this with an existing folder for the figures.
-   - **Experiment 3.** Figures are written to `plots/` inside the repository. Create that folder first (`dir.create("plots")`).
 3. **Expect a full refit.** Each script deletes its own cached `model_*_exp<N>.rds` files at the start. To reuse cached fits instead, comment out the `file.remove(...)` line.
 
 Each script is self-contained and can be run on its own. Fitting is the slow step: seven models with 4 × 6,000 iterations, using 4 cores. The mortality models in particular can take a while.
-
-### Points to be aware of when reusing the data
-
-- **Deaths after pupation.** In the mortality models, an individual is counted as a death on `Numb_days_before_death` whenever that value is recorded. This includes some deaths at the prepupa or pupa stage (`Stage of death` = `PP` or `P`): 21 in Exp. 1, 4 in Exp. 2 and 1 in Exp. 3. Filter on `Stage of death` if you need strictly larval mortality.
-- **One incomplete record.** In `Data_2_2024_days_to.csv`, individual `D_80` has `Stage of death = P` but no day of death. It therefore enters the mortality model as censored at pupation.
-- **Inconsistent codes across files.** Sex is coded `m`/`w` in Exp. 1–2 but `male`/`female` in Exp. 3, and underdeveloped adults are `underdev` in Exp. 1 but `undev` in Exp. 2. The models do not use these columns.
-- **Spline basis size in Exp. 3.** The header of `analysis_experiment3.R` gives `k = 4` for the day smooth, but the fitted model uses `k = 3`.
 
 ---
 

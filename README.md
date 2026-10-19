@@ -2,6 +2,8 @@
 
 Data and code accompanying the article **"Warmer conditions shorten pupal development in two Mediterranean antlion species"**.
 
+Version v.1.0 of this repository is on Zenodo: https://doi.org/10.5281/zenodo.23468264
+
 The repository contains individual-level life-history data for two antlion species (Neuroptera: Myrmeleontidae), *Myrmeleon almohadarum* and *Myrmeleon hyalinus*, from Doñana (SW Spain), together with the R code used to fit Bayesian models of larval mortality, development time and adult size. There are three experiments:
 
 | Experiment | Script | Data file | Design | Species | n | Duration |
